@@ -6,13 +6,13 @@ def add_kannada_movies():
     db = Session(bind=database.engine)
     
     try:
-        # Get existing objects for reference
+
         genres = {genre.name: genre for genre in db.query(database.Genre).all()}
         directors = {director.name: director for director in db.query(database.Director).all()}
         actors = {actor.name: actor for actor in db.query(database.Actor).all()}
         
-        # Add Kannada directors
-        print("🎬 Creating Kannada directors...")
+ 
+        print(" Creating Kannada directors...")
         kannada_directors_data = [
             {"name": "Rishabh Shetty", "birth_date": date(1983, 7, 7), "bio": "Director of Kantara"},
             {"name": "Rishab Shetty", "birth_date": date(1983, 7, 7), "bio": "Kantara director and actor"},
@@ -26,9 +26,8 @@ def add_kannada_movies():
                 director = database.Director(**director_data)
                 db.add(director)
                 directors[director_data["name"]] = director
-        
-        # Add Kannada actors
-        print("🎭 Creating Kannada actors...")
+
+        print(" Creating Kannada actors...")
         kannada_actors_data = [
             {"name": "Yash", "birth_date": date(1986, 1, 8), "bio": "KGF star"},
             {"name": "Puneeth Rajkumar", "birth_date": date(1975, 3, 17), "bio": "Power Star"},
@@ -47,15 +46,15 @@ def add_kannada_movies():
                 actors[actor_data["name"]] = actor
         
         db.commit()
-        print("✅ Kannada cast and crew created successfully!")
+        print("Kannada cast and crew created successfully!")
         
-        # Update dictionaries with new entries
+
         directors = {director.name: director for director in db.query(database.Director).all()}
         actors = {actor.name: actor for actor in db.query(database.Actor).all()}
         
         print("🎬 Adding 10 popular Kannada movies with authentic posters...")
         
-        # 10 popular Kannada movies with real posters
+
         kannada_movies = [
             {
                 "title": "KGF: Chapter 1",
@@ -148,12 +147,12 @@ def add_kannada_movies():
                 "genre_names": ["Thriller", "Mystery"]
             }
         ]
+
         
-        # Add the Kannada movies
         for movie_data in kannada_movies:
             director = directors.get(movie_data["director_name"])
             if not director:
-                print(f"⚠️ Director not found: {movie_data['director_name']}")
+                print(f" Director not found: {movie_data['director_name']}")
                 continue
                 
             movie = database.Movie(
@@ -164,9 +163,9 @@ def add_kannada_movies():
                 director_id=director.id
             )
             db.add(movie)
-            db.flush()  # Get the movie ID
+            db.flush()  
             
-            # Add actors
+            #  actors
             for actor_name in movie_data["actor_names"]:
                 actor = actors.get(actor_name)
                 if actor:
@@ -178,18 +177,18 @@ def add_kannada_movies():
                 if genre:
                     movie.genres.append(genre)
             
-            print(f"✅ Added: {movie_data['title']} ({movie_data['release_year']})")
+            print(f" Added: {movie_data['title']} ({movie_data['release_year']})")
         
         db.commit()
         
-        # Count total movies
+        # total movies
         total_movies = db.query(database.Movie).count()
-        print(f"\n🎬 Successfully completed Kannada section!")
-        print(f"📊 Total movies in database: {total_movies}")
-        print("🎯 Next step: Add 40 English movies")
+        print(f"\nSuccessfully completed Kannada section!")
+        print(f"Total movies in database: {total_movies}")
+        print(" Next step: Add 40 English movies")
         
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"Error: {e}")
         db.rollback()
     finally:
         db.close()
