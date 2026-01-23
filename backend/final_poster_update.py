@@ -5,15 +5,12 @@ def final_poster_update():
     db = Session(bind=database.engine)
     
     try:
-        # Get all movies that might still have incorrect posters
+        
         movies = db.query(database.Movie).all()
         updated_count = 0
         
-        print(f"Final poster quality check for {len(movies)} movies...")
-        
-        # High-quality poster URLs for any missed movies
+       
         additional_poster_mapping = {
-            # Additional popular movie mappings
             "the last kingdom": "https://image.tmdb.org/t/p/w500/gFSB4QR3ys9a0ZgMbsUP2xR4tC9.jpg",
             "midnight runner": "https://image.tmdb.org/t/p/w500/kV0CMu2p6Z7w7D7f2T1HLBX2J7p.jpg", 
             "city of dreams": "https://image.tmdb.org/t/p/w500/gGEsBPAijhVUFoiNpgZXqRVWJt2.jpg",
@@ -39,20 +36,16 @@ def final_poster_update():
             "the black swan": "https://image.tmdb.org/t/p/w500/8a9lJ0kBJg0JFbqS1j9b0C6T3C0.jpg"
         }
         
-        # Update any movies that match the additional mapping
         for movie in movies:
             title_lower = movie.title.lower().strip()
-            
-            # Check for exact matches first
+
             for mapped_title, poster_url in additional_poster_mapping.items():
                 if mapped_title == title_lower or mapped_title in title_lower:
                     old_url = movie.poster_url
                     movie.poster_url = poster_url
                     updated_count += 1
-                    print(f"✅ Updated '{movie.title}' with high-quality poster")
                     break
         
-        # For remaining movies without specific posters, ensure they have high-quality genre-based posters
         high_quality_genre_posters = {
             "action": [
                 "https://image.tmdb.org/t/p/w500/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg",  # Fast & Furious
@@ -84,15 +77,12 @@ def final_poster_update():
                 "https://image.tmdb.org/t/p/w500/6FfCtAuVAW8XJjZ7eWeLibRLWTw.jpg",  # Star Wars
             ]
         }
-        
-        # Ensure all movies have high-quality posters
+
         for movie in movies:
-            # Skip if this movie already has a high-quality TMDB poster
             if "image.tmdb.org" in (movie.poster_url or ""):
                 continue
-                
-            # Assign based on genre
-            primary_genre = "action"  # default
+
+            primary_genre = "action"  
             if movie.genres:
                 genre_name = movie.genres[0].name.lower()
                 if any(g in genre_name for g in ["action", "thriller"]):
@@ -102,31 +92,25 @@ def final_poster_update():
                 elif any(g in genre_name for g in ["sci-fi", "fantasy"]):
                     primary_genre = "sci-fi"
             
-            # Get a consistent poster for this movie
             if primary_genre in high_quality_genre_posters:
                 poster_index = movie.id % len(high_quality_genre_posters[primary_genre])
                 new_poster = high_quality_genre_posters[primary_genre][poster_index]
                 
-                # Only update if it's actually different
                 if movie.poster_url != new_poster:
                     movie.poster_url = new_poster
                     updated_count += 1
         
-        # Commit all changes
+
         db.commit()
         
-        print(f"\n🎬 Final poster update completed!")
-        print(f"✅ Updated {updated_count} movie posters with high-quality images")
-        print(f"🎭 All {len(movies)} movies now have proper poster images")
-        
-        # Show sample of poster URLs
+       
         sample_movies = movies[:5]
         print(f"\nSample poster URLs:")
         for movie in sample_movies:
             print(f"- {movie.title}: {movie.poster_url[:50]}...")
         
     except Exception as e:
-        print(f"❌ Error in final poster update: {e}")
+        print(f" Error in final poster update: {e}")
         db.rollback()
     finally:
         db.close()
