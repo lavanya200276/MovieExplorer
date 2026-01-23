@@ -16,7 +16,7 @@ code {
     monospace;
 }
 
-/* Custom Animations */
+
 @keyframes float {
   0%, 100% { 
     transform: translateY(0px) rotate(0deg); 
@@ -82,7 +82,6 @@ code {
   }
 }
 
-/* Utility Classes */
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
@@ -116,7 +115,6 @@ code {
   background-size: 300% 300%;
 }
 
-/* Glassmorphism Effects */
 .glass {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
@@ -129,7 +127,6 @@ code {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Scrollbar Styling */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -149,13 +146,12 @@ code {
   background: linear-gradient(180deg, #a78bfa, #f472b6);
 }
 
-/* Selection Styling */
 ::selection {
   background: rgba(168, 85, 247, 0.3);
   color: white;
 }
 
-/* Focus Styles */
+
 button:focus, input:focus {
   outline: 2px solid rgba(168, 85, 247, 0.5);
   outline-offset: 2px;
