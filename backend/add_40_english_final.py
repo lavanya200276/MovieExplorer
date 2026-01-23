@@ -11,9 +11,9 @@ def add_40_english_movies():
         directors = {director.name: director for director in db.query(database.Director).all()}
         actors = {actor.name: actor for actor in db.query(database.Actor).all()}
         
-        print("🎬 Adding 40 English movies with authentic posters...")
+        print("Adding 40 English movies with authentic posters...")
         
-        # 40 popular English movies with authentic TMDB posters
+ 
         english_movies = [
             {"title": "Inception", "release_year": 2010, "description": "A thief enters dreams to plant ideas.", "poster_url": "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg", "director_name": "Christopher Nolan", "actor_names": ["Leonardo DiCaprio"], "genre_names": ["Action", "Thriller"]},
             {"title": "The Dark Knight", "release_year": 2008, "description": "Batman faces the Joker.", "poster_url": "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_.jpg", "director_name": "Christopher Nolan", "actor_names": ["Christian Bale"], "genre_names": ["Action", "Drama"]},
@@ -83,37 +83,37 @@ def add_40_english_movies():
                 if genre:
                     movie.genres.append(genre)
             
-            print(f"✅ Added English: {movie_data['title']} ({movie_data['release_year']})")
+            print(f" Added English: {movie_data['title']} ({movie_data['release_year']})")
         
         db.commit()
         
-        # Final count and verification
+
         total_movies = db.query(database.Movie).count()
-        print(f"\n🎉 DATABASE COMPLETE!")
-        print(f"📊 Final movie count: {total_movies}/60")
+        print(f"\n DATABASE COMPLETE!")
+        print(f" Final movie count: {total_movies}/60")
         
-        # Perfect language distribution
-        print(f"\n📈 Final Language Distribution:")
-        print(f"🎭 Telugu movies: 10")
-        print(f"🎵 Hindi movies: 10") 
-        print(f"🎪 English movies: 40")
-        print(f"✨ Total: {total_movies} movies")
-        print(f"🎯 ALL movies have mandatory authentic posters!")
+
+        print(f"\n Final Language Distribution:")
+        print(f" Telugu movies: 10")
+        print(f" Hindi movies: 10") 
+        print(f" English movies: 40")
+        print(f" Total: {total_movies} movies")
+        print(f" ALL movies have mandatory authentic posters!")
         
-        # Verify all movies have posters
+
         movies_without_posters = db.query(database.Movie).filter(
             (database.Movie.poster_url == None) | (database.Movie.poster_url == "")
         ).count()
         
         if movies_without_posters == 0:
-            print(f"✅ POSTER VERIFICATION: All {total_movies} movies have valid poster URLs!")
+            print(f" POSTER VERIFICATION: All {total_movies} movies have valid poster URLs!")
         else:
-            print(f"⚠️ WARNING: {movies_without_posters} movies missing posters!")
+            print(f" WARNING: {movies_without_posters} movies missing posters!")
         
-        print(f"\n🚀 Your Movie Explorer Platform is ready with exactly 60 curated movies!")
+        print(f"\n Your Movie Explorer Platform is ready with exactly 60 curated movies!")
         
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f" Error: {e}")
         db.rollback()
     finally:
         db.close()
