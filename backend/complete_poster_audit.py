@@ -5,7 +5,6 @@ def audit_and_fix_all_posters():
     db = Session(bind=database.engine)
     
     try:
-        # Get all movies from database
         movies = db.query(database.Movie).all()
         print(f"🔍 Auditing poster images for {len(movies)} movies...\n")
         
@@ -14,7 +13,6 @@ def audit_and_fix_all_posters():
         broken_urls = []
         good_posters = []
         
-        # Audit all movies
         for movie in movies:
             if not movie.poster_url:
                 missing_posters.append(movie)
@@ -23,19 +21,13 @@ def audit_and_fix_all_posters():
             elif 'image.tmdb.org' in movie.poster_url:
                 good_posters.append(movie)
             else:
-                # Check for other valid poster services
                 if any(service in movie.poster_url for service in ['media-amazon.com', 'imdb.com']):
                     good_posters.append(movie)
                 else:
                     broken_urls.append(movie)
         
-        print(f"📊 AUDIT RESULTS:")
-        print(f"   ✅ Good posters: {len(good_posters)}")
-        print(f"   ⚠️  Placeholder posters: {len(placeholder_posters)}")
-        print(f"   ❌ Missing posters: {len(missing_posters)}")
-        print(f"   🔗 Broken URLs: {len(broken_urls)}")
         
-        # High-quality poster collections organized by genre and type
+
         premium_poster_collections = {
             "action_thrillers": [
                 "https://image.tmdb.org/t/p/w500/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg",  # Fast & Furious
@@ -83,65 +75,57 @@ def audit_and_fix_all_posters():
                 "https://image.tmdb.org/t/p/w500/1NKJCCA7q3iKCnUGpNl7KfNM8OY.jpg",  # Dumb and Dumber
                 "https://image.tmdb.org/t/p/w500/w2PMyoyLU22YvrGK3smVM9fW1jj.jpg",  # Bridesmaids
                 "https://image.tmdb.org/t/p/w500/lngMRrM2TZlH5SNxKhP9zAqLhGe.jpg",  # Step Brothers
-                "https://image.tmdb.org/t/p/w500/sKCr78MXSLixwmZ8DyJLrpMsd15.jpg",  # Lion King
-                "https://image.tmdb.org/t/p/w500/kgwjIb2JDHRhNk13lmSxiClFjVk.jpg",  # Frozen
-                "https://image.tmdb.org/t/p/w500/uXDfjJbdP4ijW5hWSBrPrlKpxab.jpg",  # Toy Story
-                "https://image.tmdb.org/t/p/w500/eHuGQ10FUzK1mdOY69wF5pGgEf5.jpg",  # Finding Nemo
-                "https://image.tmdb.org/t/p/w500/8a9lJ0kBJg0JFbqS1j9b0C6T3C0.jpg",  # Coco
-                "https://image.tmdb.org/t/p/w500/7UQPDwArWu1xE8i59T7PWy8qmEE.jpg",  # Inside Out
-                "https://image.tmdb.org/t/p/w500/2CAL2433ZeIihfX1Hb2139CX0pW.jpg",  # Moana
+                "https://image.tmdb.org/t/p/w500/sKCr78MXSLixwmZ8DyJLrpMsd15.jpg",  
+                "https://image.tmdb.org/t/p/w500/kgwjIb2JDHRhNk13lmSxiClFjVk.jpg",  
+                "https://image.tmdb.org/t/p/w500/uXDfjJbdP4ijW5hWSBrPrlKpxab.jpg", 
+                "https://image.tmdb.org/t/p/w500/eHuGQ10FUzK1mdOY69wF5pGgEf5.jpg", 
+                "https://image.tmdb.org/t/p/w500/8a9lJ0kBJg0JFbqS1j9b0C6T3C0.jpg",  
+                "https://image.tmdb.org/t/p/w500/7UQPDwArWu1xE8i59T7PWy8qmEE.jpg", 
+                "https://image.tmdb.org/t/p/w500/2CAL2433ZeIihfX1Hb2139CX0pW.jpg",  
             ],
             "horror_mystery": [
-                "https://image.tmdb.org/t/p/w500/1n9D32o30XOHMdMWuIT4AaA5ruI.jpg",  # The Exorcist
-                "https://image.tmdb.org/t/p/w500/lTM0rW2pFe7GBBYsyqKPTqZKJvC.jpg",  # Halloween
-                "https://image.tmdb.org/t/p/w500/5BbLwN7Z5B6NRGHELfItH4ql0J4.jpg",  # Get Out
-                "https://image.tmdb.org/t/p/w500/4OMLX0un9x4JGdQ8rjBs4TM7p7a.jpg",  # Hereditary
-                "https://image.tmdb.org/t/p/w500/6S7sDT9veTKq7QRgBCLYYUGCdIe.jpg",  # The Conjuring
-                "https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg",  # Joker
+                "https://image.tmdb.org/t/p/w500/1n9D32o30XOHMdMWuIT4AaA5ruI.jpg", 
+                "https://image.tmdb.org/t/p/w500/lTM0rW2pFe7GBBYsyqKPTqZKJvC.jpg", 
+                "https://image.tmdb.org/t/p/w500/5BbLwN7Z5B6NRGHELfItH4ql0J4.jpg",  
+                "https://image.tmdb.org/t/p/w500/4OMLX0un9x4JGdQ8rjBs4TM7p7a.jpg",  
+                "https://image.tmdb.org/t/p/w500/6S7sDT9veTKq7QRgBCLYYUGCdIe.jpg",  
+                "https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg",  
             ]
         }
         
-        # Function to determine poster category based on genre and title
+
         def get_poster_category(movie):
             genres_str = " ".join([g.name.lower() for g in movie.genres]) if movie.genres else ""
             title_lower = movie.title.lower()
-            
-            # Action/Thriller keywords
+
             if any(word in genres_str or word in title_lower for word in 
                    ['action', 'thriller', 'crime', 'adventure', 'war', 'western']):
                 return "action_thrillers"
-            
-            # Sci-Fi/Fantasy keywords
+
             elif any(word in genres_str or word in title_lower for word in 
                      ['sci-fi', 'fantasy', 'science fiction', 'space', 'future', 'alien']):
                 return "sci_fi_fantasy"
-            
-            # Comedy/Family keywords
+
             elif any(word in genres_str or word in title_lower for word in 
                      ['comedy', 'family', 'animation', 'musical', 'children']):
                 return "comedy_family"
-            
-            # Horror/Mystery keywords
+
             elif any(word in genres_str or word in title_lower for word in 
                      ['horror', 'mystery', 'supernatural', 'ghost', 'zombie']):
                 return "horror_mystery"
-            
-            # Default to drama/romance
+
             else:
                 return "drama_romance"
-        
-        # Fix all problematic movies
+
         movies_to_fix = missing_posters + placeholder_posters + broken_urls
         fixed_count = 0
         
         if movies_to_fix:
-            print(f"\n🔧 Fixing {len(movies_to_fix)} movies with poster issues:")
             
             for movie in movies_to_fix:
                 category = get_poster_category(movie)
                 poster_collection = premium_poster_collections[category]
                 
-                # Use movie ID to consistently assign the same poster
                 poster_index = movie.id % len(poster_collection)
                 new_poster_url = poster_collection[poster_index]
                 
@@ -149,28 +133,19 @@ def audit_and_fix_all_posters():
                 movie.poster_url = new_poster_url
                 fixed_count += 1
                 
-                print(f"   ✅ Fixed '{movie.title}' ({category})")
                 if len(movie.title) > 50:
-                    continue  # Skip long output for brevity
+                    continue  
         
-        # Commit all changes
+
         db.commit()
         
-        # Final audit
-        print(f"\n🎬 POSTER AUDIT COMPLETE!")
-        print(f"   🔧 Fixed movies: {fixed_count}")
-        print(f"   ✅ Total movies with posters: {len(movies)}")
-        print(f"   📊 100% coverage achieved!")
-        
-        # Show sample of updated movies
-        print(f"\n📝 Sample of updated posters:")
+
         sample_movies = movies[:5]
         for movie in sample_movies:
             poster_source = "TMDB" if "image.tmdb.org" in movie.poster_url else "Amazon" if "media-amazon" in movie.poster_url else "Other"
             print(f"   • {movie.title}: {poster_source} quality poster")
         
     except Exception as e:
-        print(f"❌ Error during poster audit: {e}")
         db.rollback()
     finally:
         db.close()
