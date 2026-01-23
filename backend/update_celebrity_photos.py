@@ -5,7 +5,6 @@ def update_celebrity_photos():
     db = Session(bind=database.engine)
     
     try:
-        # Real celebrity photos mapping
         actor_photos = {
             "mahesh babu": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Mahesh_Babu_in_Spyder_%28cropped%29.jpg",
             "samantha ruth prabhu": "https://upload.wikimedia.org/wikipedia/commons/8/80/Samantha_at_Raju_Gari_Gadhi_2_Success_Meet_%28cropped%29.jpg",
@@ -53,52 +52,37 @@ def update_celebrity_photos():
             "anil ravipudi": "https://upload.wikimedia.org/wikipedia/commons/a/a2/Anil_Ravipudi_at_F3_success_meet.jpg"
         }
         
-        # Update actor photos
+
         actors = db.query(database.Actor).all()
         updated_actors = 0
-        
-        print(f"Updating {len(actors)} actor photos...")
-        
         for actor in actors:
             actor_name_lower = actor.name.lower()
             for mapped_name, photo_url in actor_photos.items():
                 if mapped_name in actor_name_lower or any(word in actor_name_lower for word in mapped_name.split() if len(word) > 2):
                     actor.photo_url = photo_url
                     updated_actors += 1
-                    print(f"✅ Updated {actor.name} photo")
                     break
             else:
-                # Generate a professional headshot-style placeholder for unknown actors
                 actor.photo_url = f"https://randomuser.me/api/portraits/{('women' if any(name in actor.name.lower() for name in ['samantha', 'kajal', 'pooja', 'keerthy', 'kiara', 'shruti', 'kriti', 'anushka', 'rashmika', 'scarlett', 'meryl', 'viola', 'lupita']) else 'men')}/{abs(hash(actor.name)) % 99}.jpg"
         
-        # Update director photos
         directors = db.query(database.Director).all()
         updated_directors = 0
-        
-        print(f"Updating {len(directors)} director photos...")
-        
+
         for director in directors:
             director_name_lower = director.name.lower()
             for mapped_name, photo_url in director_photos.items():
                 if mapped_name in director_name_lower or any(word in director_name_lower for word in mapped_name.split() if len(word) > 2):
                     director.photo_url = photo_url
                     updated_directors += 1
-                    print(f"✅ Updated {director.name} photo")
                     break
             else:
-                # Generate a professional headshot for unknown directors
                 director.photo_url = f"https://randomuser.me/api/portraits/men/{abs(hash(director.name)) % 99}.jpg"
         
-        # Commit all changes
+
         db.commit()
         
-        print(f"\n🎭 Successfully updated celebrity photos!")
-        print(f"   Actors updated: {updated_actors}/{len(actors)}")
-        print(f"   Directors updated: {updated_directors}/{len(directors)}")
-        print("✅ Movie detail pages now show correct celebrity photos!")
-        
     except Exception as e:
-        print(f"❌ Error updating celebrity photos: {e}")
+        print(f" Error updating celebrity photos: {e}")
         db.rollback()
     finally:
         db.close()
