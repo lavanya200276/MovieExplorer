@@ -8,7 +8,6 @@ import crud
 import schemas
 import database
 
-# Create database tables
 database.Base.metadata.create_all(bind=database.engine)
 
 app = FastAPI(
@@ -17,7 +16,6 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Enable CORS for frontend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
@@ -26,7 +24,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Movie endpoints
+
 @app.get("/movies/", response_model=List[schemas.Movie])
 def read_movies(
     skip: int = 0,
