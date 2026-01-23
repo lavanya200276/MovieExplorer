@@ -10,9 +10,7 @@ def add_final_hindi_movie():
         genres = {genre.name: genre for genre in db.query(database.Genre).all()}
         directors = {director.name: director for director in db.query(database.Director).all()}
         actors = {actor.name: actor for actor in db.query(database.Actor).all()}
-        
-        # Add missing director
-        print("🎬 Adding missing director...")
+
         rakesh_roshan = database.Director(
             name="Rakesh Roshan",
             birth_date=date(1949, 9, 6),
@@ -23,10 +21,7 @@ def add_final_hindi_movie():
         
         # Update directors dictionary
         directors = {director.name: director for director in db.query(database.Director).all()}
-        
-        print("🎬 Adding final Hindi movie...")
-        
-        # Final movie to complete 100 total
+
         final_movie = {
             "title": "Krrish",
             "release_year": 2006,
@@ -65,21 +60,10 @@ def add_final_hindi_movie():
         
         # Final count
         total_movies = db.query(database.Movie).count()
-        print(f"✅ Added: {final_movie['title']} ({final_movie['release_year']})")
-        
-        print(f"\n🎉 DATABASE RESTRUCTURING COMPLETE!")
-        print(f"📊 Final movie count: {total_movies}/100")
-        
-        # Language breakdown
-        print(f"\n📈 Perfect Language Distribution:")
-        print(f"🎭 Telugu movies: 30")
-        print(f"🎬 Kannada movies: 10") 
-        print(f"🎪 English movies: 40")
-        print(f"🎵 Hindi movies: 20")
-        print(f"🎯 All {total_movies} movies have authentic posters!")
+      
         
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f" Error: {e}")
         db.rollback()
     finally:
         db.close()
