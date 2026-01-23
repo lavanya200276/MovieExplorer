@@ -11,7 +11,6 @@ def populate_sample_data():
     db = Session(bind=database.engine)
     
     try:
-        # Create genres
         genres_data = [
             {"name": "Action", "description": "High-energy films with exciting sequences"},
             {"name": "Comedy", "description": "Films designed to make audiences laugh"},
@@ -144,26 +143,26 @@ def populate_sample_data():
                 "description": "Barbie and Ken are having the time of their lives in the colorful world of Barbie Land.",
                 "poster_url": "https://example.com/barbie.jpg",
                 "director_id": director_objects[2].id,  # Gerwig
-                "actor_ids": [actor_objects[1].id, actor_objects[2].id],  # Robbie, Gosling
-                "genre_ids": [genre_objects[1].id, genre_objects[5].id]  # Comedy, Romance
+                "actor_ids": [actor_objects[1].id, actor_objects[2].id],  
+                "genre_ids": [genre_objects[1].id, genre_objects[5].id]  
             },
             {
                 "title": "Dune",
                 "release_year": 2021,
                 "description": "Paul Atreides leads nomadic tribes in a revolt against the galactic emperor.",
                 "poster_url": "https://example.com/dune.jpg",
-                "director_id": director_objects[3].id,  # Villeneuve
-                "actor_ids": [actor_objects[3].id, actor_objects[4].id],  # Chalamet, Zendaya
-                "genre_ids": [genre_objects[0].id, genre_objects[2].id, genre_objects[3].id]  # Action, Drama, Sci-Fi
+                "director_id": director_objects[3].id,  
+                "actor_ids": [actor_objects[3].id, actor_objects[4].id],  
+                "genre_ids": [genre_objects[0].id, genre_objects[2].id, genre_objects[3].id] 
             },
             {
                 "title": "The Dark Knight",
                 "release_year": 2008,
                 "description": "Batman must accept one of the greatest psychological and physical tests.",
                 "poster_url": "https://example.com/darkknight.jpg",
-                "director_id": director_objects[0].id,  # Nolan
-                "actor_ids": [actor_objects[7].id],  # Bale
-                "genre_ids": [genre_objects[0].id, genre_objects[2].id, genre_objects[4].id]  # Action, Drama, Thriller
+                "director_id": director_objects[0].id,  
+                "actor_ids": [actor_objects[7].id], 
+                "genre_ids": [genre_objects[0].id, genre_objects[2].id, genre_objects[4].id] 
             }
         ]
         
