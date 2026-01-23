@@ -6,8 +6,7 @@ def clear_and_add_telugu_movies():
     db = Session(bind=database.engine)
     
     try:
-        # Clear all existing data
-        print("🗑️ Clearing existing database...")
+        print(" Clearing existing database...")
         db.execute(database.movie_actors.delete())
         db.execute(database.movie_genres.delete())
         db.query(database.Movie).delete()
@@ -16,7 +15,7 @@ def clear_and_add_telugu_movies():
         db.query(database.Genre).delete()
         
         # Create genres
-        print("🎭 Creating genres...")
+        print("Creating genres...")
         genres_data = [
             {"name": "Action", "description": "Action and adventure movies"},
             {"name": "Drama", "description": "Dramatic movies"},
@@ -31,8 +30,8 @@ def clear_and_add_telugu_movies():
             genre = database.Genre(**genre_data)
             db.add(genre)
         
-        # Create Telugu directors
-        print("🎬 Creating Telugu directors...")
+        #  Telugu directors
+        print(" Creating Telugu directors...")
         directors_data = [
             {"name": "S. S. Rajamouli", "birth_date": date(1973, 10, 10), "bio": "Epic filmmaker known for Baahubali series"},
             {"name": "Trivikram Srinivas", "birth_date": date(1971, 11, 7), "bio": "Popular Telugu director"},
@@ -50,8 +49,8 @@ def clear_and_add_telugu_movies():
             director = database.Director(**director_data)
             db.add(director)
         
-        # Create Telugu actors
-        print("🎭 Creating Telugu actors...")
+        #  Telugu actors
+        print(" Creating Telugu actors...")
         actors_data = [
             {"name": "Mahesh Babu", "birth_date": date(1975, 8, 9), "bio": "Prince of Tollywood"},
             {"name": "Allu Arjun", "birth_date": date(1982, 4, 8), "bio": "Stylish Star"},
@@ -75,15 +74,15 @@ def clear_and_add_telugu_movies():
             db.add(actor)
         
         db.commit()
-        print("✅ Base data created successfully!")
+        print(" Base data created successfully!")
         
         # Get created objects for reference
         genres = {genre.name: genre for genre in db.query(database.Genre).all()}
         directors = {director.name: director for director in db.query(database.Director).all()}
         actors = {actor.name: actor for actor in db.query(database.Actor).all()}
         
-        # Add 30 popular Telugu movies with authentic posters
-        print("🎬 Adding 30 Telugu movies with authentic posters...")
+
+        print("Adding 30 Telugu movies with authentic posters...")
         
         movies_data = [
             {
@@ -178,7 +177,7 @@ def clear_and_add_telugu_movies():
             }
         ]
         
-        # Add movies (first 10)
+    
         for movie_data in movies_data:
             director = directors.get(movie_data["director_name"])
             if not director:
@@ -192,7 +191,7 @@ def clear_and_add_telugu_movies():
                 director_id=director.id
             )
             db.add(movie)
-            db.flush()  # Get the movie ID
+            db.flush()
             
             # Add actors
             for actor_name in movie_data["actor_names"]:
@@ -206,17 +205,17 @@ def clear_and_add_telugu_movies():
                 if genre:
                     movie.genres.append(genre)
             
-            print(f"✅ Added: {movie_data['title']} ({movie_data['release_year']})")
+            print(f" Added: {movie_data['title']} ({movie_data['release_year']})")
         
         db.commit()
         
-        # Count total movies
+        # total movies
         total_movies = db.query(database.Movie).count()
-        print(f"\n🎬 Successfully added {total_movies} Telugu movies to database!")
-        print("📊 Next step: Add remaining 20 Telugu movies, then Kannada, English, and Hindi films")
+        print(f"\n Successfully added {total_movies} Telugu movies to database!")
+        print(" Next step: Add remaining 20 Telugu movies, then Kannada, English, and Hindi films")
         
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f" Error: {e}")
         db.rollback()
     finally:
         db.close()
