@@ -11,8 +11,8 @@ def add_hindi_movies():
         directors = {director.name: director for director in db.query(database.Director).all()}
         actors = {actor.name: actor for actor in db.query(database.Actor).all()}
         
-        # Add Hindi directors
-        print("🎬 Creating Hindi directors...")
+        # Hindi directors
+        print(" Creating Hindi directors...")
         hindi_directors = [
             {"name": "Rajkumar Hirani", "birth_date": date(1962, 11, 20), "bio": "3 Idiots, PK director"},
             {"name": "Zoya Akhtar", "birth_date": date(1972, 10, 14), "bio": "Zindagi Na Milegi Dobara director"},
@@ -29,8 +29,8 @@ def add_hindi_movies():
                 db.add(director)
                 directors[director_data["name"]] = director
         
-        # Add Hindi actors
-        print("🎭 Creating Hindi actors...")
+        #  Hindi actors
+        print(" Creating Hindi actors...")
         hindi_actors = [
             {"name": "Aamir Khan", "birth_date": date(1965, 3, 14), "bio": "Mr. Perfectionist"},
             {"name": "Shah Rukh Khan", "birth_date": date(1965, 11, 2), "bio": "King Khan"},
@@ -56,7 +56,7 @@ def add_hindi_movies():
         directors = {director.name: director for director in db.query(database.Director).all()}
         actors = {actor.name: actor for actor in db.query(database.Actor).all()}
         
-        print("🎬 Adding 20 popular Hindi movies...")
+        print("Adding 20 popular Hindi movies...")
         
         hindi_movies = [
             {"title": "3 Idiots", "release_year": 2009, "description": "Three friends reunite to search for their missing friend.", "poster_url": "https://m.media-amazon.com/images/M/MV5BNTkyOGVjMGEtNmQzZi00NzFlLTlhOWQtODYyMDc2ZGJmYzFhXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg", "director_name": "Rajkumar Hirani", "actor_names": ["Aamir Khan"], "genre_names": ["Comedy", "Drama"]},
@@ -82,11 +82,11 @@ def add_hindi_movies():
             {"title": "Jab We Met", "release_year": 2007, "description": "A depressed businessman meets a bubbly girl on a train.", "poster_url": "https://m.media-amazon.com/images/M/MV5BMjI1NDYwMDQ4MV5BMl5BanBnXkFtZTgwNTc1NDc4MDE@._V1_.jpg", "director_name": "Karan Johar", "actor_names": ["Kareena Kapoor"], "genre_names": ["Romance", "Comedy"]}
         ]
         
-        # Add Hindi movies
+        # Hindi movies
         for movie_data in hindi_movies:
             director = directors.get(movie_data["director_name"])
             if not director:
-                print(f"⚠️ Director not found: {movie_data['director_name']}")
+                print(f" Director not found: {movie_data['director_name']}")
                 continue
                 
             movie = database.Movie(
@@ -109,24 +109,24 @@ def add_hindi_movies():
                 if genre:
                     movie.genres.append(genre)
             
-            print(f"✅ Added: {movie_data['title']} ({movie_data['release_year']})")
+            print(f" Added: {movie_data['title']} ({movie_data['release_year']})")
         
         db.commit()
         
         total_movies = db.query(database.Movie).count()
-        print(f"\n🎉 DATABASE RESTRUCTURING COMPLETE!")
-        print(f"📊 Final movie count: {total_movies}/100")
+        print(f"\n DATABASE RESTRUCTURING COMPLETE!")
+        print(f" Final movie count: {total_movies}/100")
         
         # Language breakdown
-        print(f"\n📈 Language Distribution:")
-        print(f"🎭 Telugu movies: 30")
-        print(f"🎬 Kannada movies: 10") 
-        print(f"🎪 English movies: 40")
-        print(f"🎵 Hindi movies: {total_movies - 79}")
-        print(f"🎯 All movies have authentic posters!")
+        print(f"\n Language Distribution:")
+        print(f" Telugu movies: 30")
+        print(f" Kannada movies: 10") 
+        print(f" English movies: 40")
+        print(f" Hindi movies: {total_movies - 79}")
+        print(f" All movies have authentic posters!")
         
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f" Error: {e}")
         db.rollback()
     finally:
         db.close()
