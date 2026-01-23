@@ -6,16 +6,14 @@ def update_all_movie_posters():
     db = Session(bind=database.engine)
     
     try:
-        # Comprehensive mapping for known movies (both real and generated titles)
+        
         movie_poster_mapping = {
-            # Known real movies
             "inception": "https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg",
             "pulp fiction": "https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg",
             "barbie": "https://image.tmdb.org/t/p/w500/iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg",
             "dune": "https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg",
             "the dark knight": "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
-            
-            # Mahesh Babu & Tollywood
+
             "sarkaru vaari paata": "https://m.media-amazon.com/images/M/MV5BYjFjMTQzY2EtZjQ5Mi00NGM0LWJiNzQtN2Q5Zjc1MzI1NzZmXkEyXkFqcGdeQXVyMTUzNTgzNzM0._V1_.jpg",
             "maharshi": "https://m.media-amazon.com/images/M/MV5BMjIwZDMwZTQtYTMwZC00MDQyLTkzNTUtYjA5NGZmM2Q5MGNkXkEyXkFqcGdeQXVyMTUzNTgzNzM0._V1_.jpg",
             "bharat ane nenu": "https://m.media-amazon.com/images/M/MV5BMjI1Mzg5MDczOV5BMl5BanBnXkFtZTgwNjIwMDk1NTM@._V1_.jpg",
@@ -26,8 +24,7 @@ def update_all_movie_posters():
             "rrr": "https://image.tmdb.org/t/p/w500/w6C2WxqOLWHZoew8UL3P2rrJcbX.jpg",
             "pushpa": "https://image.tmdb.org/t/p/w500/ugQW8BQOmJ2Qtt6tG9lGbEfn1jX.jpg",
             "a aa": "https://m.media-amazon.com/images/M/MV5BMTgxNjA1Njc2MV5BMl5BanBnXkFtZTgwNjE4NzQ2OTE@._V1_.jpg",
-            
-            # Popular Hollywood movies
+
             "avengers": "https://image.tmdb.org/t/p/w500/RYMX2wcKCBAr24UyPD7xwmjaTn.jpg",
             "iron man": "https://image.tmdb.org/t/p/w500/78lPtwv72eTNqFW9COBYI0dWDJa.jpg",
             "spider-man": "https://image.tmdb.org/t/p/w500/gh4cZbhZxyTbgxQPxD0dOudNPTn.jpg",
@@ -54,8 +51,7 @@ def update_all_movie_posters():
             "toy story": "https://image.tmdb.org/t/p/w500/uXDfjJbdP4ijW5hWSBrPrlKpxab.jpg",
             "finding nemo": "https://image.tmdb.org/t/p/w500/eHuGQ10FUzK1mdOY69wF5pGgEf5.jpg"
         }
-        
-        # Genre-based poster collections for better theming
+
         genre_poster_collections = {
             "action": [
                 "https://image.tmdb.org/t/p/w500/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg",  # Fast & Furious
@@ -114,8 +110,7 @@ def update_all_movie_posters():
                 "https://image.tmdb.org/t/p/w500/q125RHUDgR4gjwh1QkfYuJLYkL.jpg"    # Incredibles
             ]
         }
-        
-        # Get all movies from database
+
         movies = db.query(database.Movie).all()
         updated_count = 0
         
@@ -124,36 +119,30 @@ def update_all_movie_posters():
         for movie in movies:
             title_lower = movie.title.lower()
             found_specific_poster = False
-            
-            # Check for specific movie poster mappings
+
             for mapped_title, poster_url in movie_poster_mapping.items():
                 if (mapped_title in title_lower or 
                     any(word in title_lower for word in mapped_title.split() if len(word) > 3)):
                     movie.poster_url = poster_url
                     updated_count += 1
-                    print(f"✅ Updated '{movie.title}' with specific poster")
+                    print(f" Updated '{movie.title}' with specific poster")
                     found_specific_poster = True
                     break
-            
-            # If no specific poster found, use genre-based posters
+
             if not found_specific_poster:
                 primary_genre = "action"  # default
-                
-                # Determine primary genre for poster selection
+
                 if movie.genres:
                     genre_name = movie.genres[0].name.lower()
                     if genre_name in genre_poster_collections:
                         primary_genre = genre_name
                     elif "tollywood" in genre_name:
-                        # Use Indian cinema themed posters for Tollywood
                         primary_genre = "action"
-                
-                # Select a poster from the genre collection based on movie ID for consistency
+
                 if primary_genre in genre_poster_collections:
                     poster_index = movie.id % len(genre_poster_collections[primary_genre])
                     movie.poster_url = genre_poster_collections[primary_genre][poster_index]
                 else:
-                    # Fallback to action posters
                     poster_index = movie.id % len(genre_poster_collections["action"])
                     movie.poster_url = genre_poster_collections["action"][poster_index]
                 
@@ -161,22 +150,20 @@ def update_all_movie_posters():
                 if updated_count % 25 == 0:
                     print(f"Updated {updated_count} movies...")
         
-        # Commit all changes
         db.commit()
         
-        print(f"\n🎬 Successfully updated ALL {updated_count} movies with appropriate posters!")
-        print("✅ Movies now have either specific real posters or genre-appropriate themed posters")
-        print("🎭 The Movie Explorer Platform now has a complete visual experience!")
+        print(f"\n Successfully updated ALL {updated_count} movies with appropriate posters!")
+        print("Movies now have either specific real posters or genre-appropriate themed posters")
+        print(" The Movie Explorer Platform now has a complete visual experience!")
         
-        # Show some statistics
         specific_count = sum(1 for movie in movies if any(mapped in movie.title.lower() for mapped in movie_poster_mapping.keys()))
-        print(f"\n📊 Statistics:")
+        print(f"\n Statistics:")
         print(f"   Real movie posters: {specific_count}")
         print(f"   Genre-themed posters: {len(movies) - specific_count}")
         print(f"   Total updated: {len(movies)}")
         
     except Exception as e:
-        print(f"❌ Error updating movie posters: {e}")
+        print(f" Error updating movie posters: {e}")
         db.rollback()
     finally:
         db.close()
