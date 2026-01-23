@@ -12,7 +12,7 @@ def add_more_content():
     db = Session(bind=database.engine)
     
     try:
-        # Add more genres first
+
         additional_genres = [
             {"name": "Fantasy", "description": "Magical and supernatural stories"},
             {"name": "Mystery", "description": "Puzzling crimes and investigations"},
@@ -29,7 +29,6 @@ def add_more_content():
             genre = crud.create_genre(db, schemas.GenreCreate(**genre_data))
             existing_genres.append(genre)
         
-        # Add more directors
         additional_directors = [
             {"name": "Steven Spielberg", "birth_date": date(1946, 12, 18), "bio": "Legendary filmmaker"},
             {"name": "Martin Scorsese", "birth_date": date(1942, 11, 17), "bio": "Master of cinema"},
@@ -46,7 +45,7 @@ def add_more_content():
             director = crud.create_director(db, schemas.DirectorCreate(**director_data))
             existing_directors.append(director)
         
-        # Add more actors
+
         additional_actors = [
             {"name": "Robert Downey Jr.", "birth_date": date(1965, 4, 4), "bio": "Iron Man actor"},
             {"name": "Scarlett Johansson", "birth_date": date(1984, 11, 22), "bio": "Versatile actress"},
@@ -63,7 +62,7 @@ def add_more_content():
             actor = crud.create_actor(db, schemas.ActorCreate(**actor_data))
             existing_actors.append(actor)
         
-        # Generate movie titles and data
+
         movie_titles = [
             "The Last Kingdom", "Midnight Runner", "City of Dreams", "The Silent Hour",
             "Broken Wings", "Rising Storm", "The Golden Path", "Shadow Dance",
@@ -79,16 +78,15 @@ def add_more_content():
             "The Green Mile", "Orange Sunset", "The Yellow Brick Road", "Pink Flamingo",
         ]
         
-        # Add descriptive words for variation
+
         prefixes = ["The Amazing", "The Incredible", "The Spectacular", "The Magnificent", 
                    "The Extraordinary", "The Ultimate", "The Legendary", "The Epic"]
         suffixes = ["Returns", "Rises", "Begins", "Forever", "Reborn", "Unleashed", 
                    "Revolution", "Chronicles", "Legacy", "Origins"]
         
-        # Generate 200 movies
+
         all_movies = []
         for i in range(200):
-            # Create varied titles
             if i < len(movie_titles):
                 title = movie_titles[i]
             elif i < len(movie_titles) * 2:
@@ -96,22 +94,20 @@ def add_more_content():
             else:
                 base_title = random.choice(movie_titles)
                 title = f"{base_title} {random.choice(suffixes)}"
-            
-            # Random year between 1990-2024
+
             release_year = random.randint(1990, 2024)
             
-            # Random director
+
             director = random.choice(existing_directors)
             
-            # Random 2-4 actors
+
             num_actors = random.randint(2, 4)
             selected_actors = random.sample(existing_actors, min(num_actors, len(existing_actors)))
             
-            # Random 1-3 genres
+
             num_genres = random.randint(1, 3)
             selected_genres = random.sample(existing_genres, min(num_genres, len(existing_genres)))
-            
-            # Generate description
+
             descriptions = [
                 f"A thrilling adventure set in {release_year}.",
                 f"An epic tale of courage and determination.",
