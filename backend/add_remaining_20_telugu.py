@@ -6,14 +6,11 @@ def add_remaining_telugu_movies():
     db = Session(bind=database.engine)
     
     try:
-        # Get existing objects for reference
+
         genres = {genre.name: genre for genre in db.query(database.Genre).all()}
         directors = {director.name: director for director in db.query(database.Director).all()}
         actors = {actor.name: actor for actor in db.query(database.Actor).all()}
         
-        print("🎬 Adding remaining 20 Telugu movies...")
-        
-        # Additional 20 Telugu movies with authentic posters
         remaining_movies = [
             {
                 "title": "A Aa",
@@ -197,11 +194,11 @@ def add_remaining_telugu_movies():
             }
         ]
         
-        # Add the remaining movies
+
         for movie_data in remaining_movies:
             director = directors.get(movie_data["director_name"])
             if not director:
-                print(f"⚠️ Director not found: {movie_data['director_name']}")
+                print(f" Director not found: {movie_data['director_name']}")
                 continue
                 
             movie = database.Movie(
@@ -212,7 +209,7 @@ def add_remaining_telugu_movies():
                 director_id=director.id
             )
             db.add(movie)
-            db.flush()  # Get the movie ID
+            db.flush() 
             
             # Add actors
             for actor_name in movie_data["actor_names"]:
@@ -226,18 +223,16 @@ def add_remaining_telugu_movies():
                 if genre:
                     movie.genres.append(genre)
             
-            print(f"✅ Added: {movie_data['title']} ({movie_data['release_year']})")
+            print(f" Added: {movie_data['title']} ({movie_data['release_year']})")
         
         db.commit()
         
         # Count total movies
         total_movies = db.query(database.Movie).count()
-        print(f"\n🎬 Successfully completed Telugu section!")
-        print(f"📊 Total movies in database: {total_movies}")
-        print("🎯 Next step: Add 10 Kannada movies")
+        
         
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f" Error: {e}")
         db.rollback()
     finally:
         db.close()
