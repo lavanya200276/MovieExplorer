@@ -11,8 +11,7 @@ def add_english_movies():
         directors = {director.name: director for director in db.query(database.Director).all()}
         actors = {actor.name: actor for actor in db.query(database.Actor).all()}
         
-        # Add English directors
-        print("🎬 Creating English directors...")
+
         english_directors = [
             {"name": "Christopher Nolan", "birth_date": date(1970, 7, 30), "bio": "Inception, Dark Knight director"},
             {"name": "Quentin Tarantino", "birth_date": date(1963, 3, 27), "bio": "Pulp Fiction director"},
@@ -30,8 +29,7 @@ def add_english_movies():
                 db.add(director)
                 directors[director_data["name"]] = director
         
-        # Add English actors  
-        print("🎭 Creating English actors...")
+
         english_actors = [
             {"name": "Leonardo DiCaprio", "birth_date": date(1974, 11, 11), "bio": "Titanic, Inception star"},
             {"name": "Tom Hanks", "birth_date": date(1956, 7, 9), "bio": "Forrest Gump star"},
@@ -54,8 +52,7 @@ def add_english_movies():
         # Update dictionaries
         directors = {director.name: director for director in db.query(database.Director).all()}
         actors = {actor.name: actor for actor in db.query(database.Actor).all()}
-        
-        print("🎬 Adding 40 popular English movies...")
+
         
         english_movies = [
             {"title": "Inception", "release_year": 2010, "description": "A thief enters dreams to plant ideas.", "poster_url": "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg", "director_name": "Christopher Nolan", "actor_names": ["Leonardo DiCaprio"], "genre_names": ["Action", "Thriller"]},
@@ -129,17 +126,14 @@ def add_english_movies():
                 if genre:
                     movie.genres.append(genre)
             
-            print(f"✅ Added: {movie_data['title']} ({movie_data['release_year']})")
+            print(f" Added: {movie_data['title']} ({movie_data['release_year']})")
         
         db.commit()
         
         total_movies = db.query(database.Movie).count()
-        print(f"\n🎬 Successfully completed English section!")
-        print(f"📊 Total movies in database: {total_movies}")
-        print("🎯 Next step: Add 20 Hindi movies")
         
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f" Error: {e}")
         db.rollback()
     finally:
         db.close()
