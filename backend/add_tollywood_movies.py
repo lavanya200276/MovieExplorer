@@ -8,13 +8,12 @@ def add_tollywood_movies():
     db = Session(bind=database.engine)
     
     try:
-        # Add Tollywood/Telugu genre if it doesn't exist
         tollywood_genre = crud.create_genre(db, schemas.GenreCreate(
             name="Tollywood",
             description="Telugu cinema films from Andhra Pradesh and Telangana"
         ))
         
-        # Get existing genres for combinations
+
         existing_genres = crud.get_genres(db)
         action_genre = next((g for g in existing_genres if g.name == "Action"), None)
         drama_genre = next((g for g in existing_genres if g.name == "Drama"), None)
@@ -22,7 +21,7 @@ def add_tollywood_movies():
         thriller_genre = next((g for g in existing_genres if g.name == "Thriller"), None)
         comedy_genre = next((g for g in existing_genres if g.name == "Comedy"), None)
         
-        # Add Telugu actors
+
         tollywood_actors = [
             {
                 "name": "Mahesh Babu",
@@ -121,7 +120,7 @@ def add_tollywood_movies():
             actor = crud.create_actor(db, schemas.ActorCreate(**actor_data))
             actor_objects.append(actor)
         
-        # Add Telugu directors
+
         tollywood_directors = [
             {
                 "name": "S. S. Rajamouli",
@@ -171,10 +170,9 @@ def add_tollywood_movies():
         for director_data in tollywood_directors:
             director = crud.create_director(db, schemas.DirectorCreate(**director_data))
             director_objects.append(director)
-        
-        # Mahesh Babu filmography and other Tollywood hits
+
         tollywood_movies = [
-            # Mahesh Babu Movies (Recent and Popular)
+
             {
                 "title": "Sarkaru Vaari Paata",
                 "release_year": 2022,
@@ -241,7 +239,7 @@ def add_tollywood_movies():
                 ],
                 "genres": [tollywood_genre, thriller_genre, action_genre]
             },
-            # Other Popular Tollywood Movies
+
             {
                 "title": "Baahubali: The Beginning",
                 "release_year": 2015,
@@ -288,10 +286,9 @@ def add_tollywood_movies():
             }
         ]
         
-        # Create movies with poster URLs
+
         created_movies = []
         for i, movie_data in enumerate(tollywood_movies):
-            # Skip movies where actors/directors weren't found
             try:
                 movie_create_data = {
                     "title": movie_data["title"],
@@ -305,17 +302,11 @@ def add_tollywood_movies():
                 
                 movie = crud.create_movie(db, schemas.MovieCreate(**movie_create_data))
                 created_movies.append(movie)
-                print(f"Added: {movie.title} ({movie.release_year})")
                 
             except (AttributeError, StopIteration) as e:
-                print(f"Skipping {movie_data['title']} due to missing data: {e}")
                 continue
         
-        print(f"\nSuccessfully added {len(created_movies)} Tollywood movies!")
-        print("Tollywood content now available in the Movie Explorer!")
-        
     except Exception as e:
-        print(f"Error adding Tollywood movies: {e}")
         db.rollback()
     finally:
         db.close()
